@@ -1,0 +1,1 @@
+# lynk-agro-mobile
