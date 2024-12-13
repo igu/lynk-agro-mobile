@@ -45,6 +45,7 @@ export default function Login() {
   const {
     control,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<UserAccountLoginFormProps>();
 
@@ -116,26 +117,65 @@ export default function Login() {
           },
         }}
         sensitiveField
-        onSubmitEditing={() => handleSubmit(checkUserInfo)}
+        onSubmitEditing={handleSubmit((data) => {
+          const success = checkUserInfo(data);
+
+          success
+            ? router.navigate("/home")
+            : setError("password", {
+                type: "required",
+                message: "E-mail ou senha incorretos. Tente novamente.",
+              });
+        })}
         returnKeyType={"done"}
       />
 
-      <Button title="Entrar" onPress={handleSubmit(checkUserInfo)} />
+      <Button
+        title="Entrar"
+        onPress={handleSubmit((data) => {
+          const success = checkUserInfo(data);
 
-      <Text
+          success
+            ? router.navigate("/home")
+            : setError("password", {
+                type: "required",
+                message: "E-mail ou senha incorretos. Tente novamente.",
+              });
+        })}
+      />
+
+      <View
         style={{
-          fontSize: 16,
-          fontFamily: fontFamily.medium,
-          color: colors.gray[200],
-          textAlign: "center",
-        }}
-        onPress={() => {
-          updateUserAccountRegisterForm({});
-          router.navigate("/signup");
+          flex: 1,
+          width: "100%",
+          justifyContent: "space-between",
+          flexDirection: "row",
         }}
       >
-        Vem ser Lynk Agro, Cadastre-se
-      </Text>
+        <Text
+          style={{
+            fontSize: 16,
+            fontFamily: fontFamily.medium,
+            color: colors.gray[200],
+          }}
+          onPress={() => {
+            updateUserAccountRegisterForm({});
+            router.navigate("/signup");
+          }}
+        >
+          Cadastre-se
+        </Text>
+
+        <Text
+          style={{
+            fontSize: 16,
+            fontFamily: fontFamily.regular,
+            color: colors.gray[300],
+          }}
+        >
+          Esqueci minha senha?
+        </Text>
+      </View>
     </View>
   );
 }
